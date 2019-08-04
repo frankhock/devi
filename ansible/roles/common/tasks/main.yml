@@ -1,0 +1,22 @@
+---
+- name: "add user: {{ username }}"
+  become: yes
+  user:
+    name: "{{ username }}"
+    password: "{{ password }}"
+    groups:
+      - sudo
+    state: present
+
+- name: add public key
+  authorized_key:
+    user: "{{ username }}"
+    key: "{{ public_key_path }}"
+
+- name: disable root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin yes'
+    line: 'PermitRootLogin no'
+  notify:
+    - restart sshd
