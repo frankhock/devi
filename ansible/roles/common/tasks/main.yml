@@ -11,12 +11,20 @@
 - name: add public key
   authorized_key:
     user: "{{ username }}"
-    key: "{{ public_key_path }}"
+    key: "{{ public_key }}"
 
-- name: disable root login
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^PermitRootLogin yes'
-    line: 'PermitRootLogin no'
-  notify:
-    - restart sshd
+- name: install dependencies
+  become: yes
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - aptitude
+
+# - name: disable root login
+#   lineinfile:
+#     path: /etc/ssh/sshd_config
+#     regexp: '^PermitRootLogin yes'
+#     line: 'PermitRootLogin no'
+#   notify:
+#     - restart sshd

@@ -1,12 +1,10 @@
 ---
 - hosts: devi
+  vars_files:
+    - variables.yml
   roles:
     - common
-
-#   roles:
-#     - role: gantsign.oh-my-zsh
-#       users:
-#         - username: hancock
+    - zsh
 
 #   tasks:
 #     - name: switch to dev user

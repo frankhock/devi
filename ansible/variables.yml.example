@@ -1,0 +1,5 @@
+---
+password: "{{ 'supersecret' | password_hash('sha512') }}"
+public_key: "{{ lookup('file', '/Users/$user/.ssh/id_rsa.pub') }}"
+username: devi
+aliases_path: /path/to/aliases
