@@ -5,6 +5,7 @@
   roles:
     - common
     - zsh
+    - vim
 
 #   tasks:
 #     - name: switch to dev user

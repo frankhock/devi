@@ -1,0 +1,14 @@
+- name: Download SpaceVim
+  become: yes
+  become_user: "{{ username }}"
+  get_url: url=https://spacevim.org/install.sh dest=/tmp/spacevim-installer.sh mode=0755
+
+- name: Execute the spacevim-installer.sh
+  become: yes
+  become_user: "{{ username }}"
+  shell: /tmp/spacevim-installer.sh
+
+- name: Remove the spacevim-installer.sh
+  become: yes
+  become_user: "{{ username }}"
+  file: path=/tmp/spacevim-installer.sh state=absent
