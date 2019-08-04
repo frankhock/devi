@@ -1,0 +1,25 @@
+---
+- name: download nvm installer
+  become: yes
+  become_user: "{{ username }}"
+  get_url: url=https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh dest=/tmp/nvm-installer.sh mode=0755
+
+- name: execute the nvm-installer.sh
+  become: yes
+  become_user: "{{ username }}"
+  shell: /tmp/nvm-installer.sh
+
+- name: remove the nvm-installer.sh
+  become: yes
+  become_user: "{{ username }}"
+  file: path=/tmp/nvm-installer.sh state=absent
+
+- name: update .zshrc with nvm settings
+  become: yes
+  become_user: "{{ username }}"
+  blockinfile:
+    path: ~/.zshrc
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
