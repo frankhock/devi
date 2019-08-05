@@ -21,6 +21,7 @@
   with_items:
     - aptitude
     - tmux
+    - htop
 
 - name: disable root login
   lineinfile:

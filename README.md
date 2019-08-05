@@ -10,6 +10,7 @@ Automate your remote dev env
 - tmux
 - SpaceVim
 - nvm
+- htop
 - dev user with ssh access
 - disabled root login
 
