@@ -22,10 +22,10 @@
     - aptitude
     - tmux
 
-# - name: disable root login
-#   lineinfile:
-#     path: /etc/ssh/sshd_config
-#     regexp: '^PermitRootLogin yes'
-#     line: 'PermitRootLogin no'
-#   notify:
-#     - restart sshd
+- name: disable root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin yes'
+    line: 'PermitRootLogin no'
+  notify:
+    - restart sshd
