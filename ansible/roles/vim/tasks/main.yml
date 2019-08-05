@@ -12,11 +12,3 @@
   become: yes
   become_user: "{{ username }}"
   file: path=/tmp/spacevim-installer.sh state=absent
-
-- name: update spacevim color scheme
-  become: yes
-  become_user: "{{ username }}"
-  lineinfile:
-    path: ~/.SpaceVim.d/init.toml
-    regexp: '^\s*colorscheme\s='
-    line: '    colorscheme = "SpaceVim"'
