@@ -11,6 +11,7 @@ Automate your remote dev env
 - SpaceVim
 - nvm
 - dev user with ssh access
+- disabled root login
 
 ## Setup
 
