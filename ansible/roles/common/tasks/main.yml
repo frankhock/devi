@@ -13,6 +13,10 @@
     user: "{{ username }}"
     key: "{{ public_key }}"
 
+- name: apt update
+  apt:
+    update_cache: true
+
 - name: install dependencies
   become: yes
   package:
@@ -22,11 +26,3 @@
     - aptitude
     - tmux
     - htop
-
-- name: disable root login
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^PermitRootLogin yes'
-    line: 'PermitRootLogin no'
-  notify:
-    - restart sshd

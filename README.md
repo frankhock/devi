@@ -10,6 +10,8 @@ Automate your remote dev env
 - tmux
 - SpaceVim
 - nvm
+- rbenv
+- awscli
 - htop
 - dev user with ssh access
 - disabled root login
@@ -22,4 +24,6 @@ create `ansible/inventory` file - update config using `ansible/inventory.example
 
 create `ansible/variables.yml` file - update variables using `ansible/variables.yml.example` as reference
 
-run `cd ansible && ansible-playbook -i inventory -u root --private-key=$HOME/.ssh/id_rsa devi.yml`
+install dependencies - from the `ansible` directory run `ansible-galaxy install -r requirements.yml`
+
+run playbook - from the `ansible` directory run `ansible-playbook -i inventory -u root --private-key=$HOME/.ssh/id_rsa devi.yml`

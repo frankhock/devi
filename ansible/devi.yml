@@ -7,3 +7,5 @@
     - zsh
     - vim
     - nvm
+    - rbenv
+    - awscli

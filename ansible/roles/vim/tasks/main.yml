@@ -12,3 +12,8 @@
   become: yes
   become_user: "{{ username }}"
   file: path=/tmp/spacevim-installer.sh state=absent
+
+- name: set git default editor to vim
+  become: yes
+  become_user: "{{ username }}"
+  shell: git config --global core.editor "vim"

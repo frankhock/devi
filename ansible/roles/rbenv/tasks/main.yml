@@ -1,0 +1,29 @@
+---
+- name: install dependencies
+  become: yes
+  apt:
+    name: ['libssl-dev', 'libreadline-dev', 'zlib1g-dev']
+    state: present
+
+- name: download rbenv
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: ~/.rbenv
+
+- name: download rbenv ruby-build
+  become: yes
+  become_user: "{{ username }}"
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: ~/.rbenv/plugins/ruby-build
+
+- name: update .zshrc with rbenv settings
+  become: yes
+  become_user: "{{ username }}"
+  blockinfile:
+    path: ~/.zshrc
+    block: |
+      export PATH="$HOME/.rbenv/bin:$PATH"
+      eval "$(rbenv init -)"
