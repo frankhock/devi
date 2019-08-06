@@ -1,24 +1,31 @@
 ---
-- name: download nvm installer
+- name: Check if nvm exists
   become: yes
   become_user: "{{ username }}"
-  get_url: url=https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh dest=/tmp/nvm-installer.sh mode=0755
+  stat:
+    path: ~/.nvm
+  register: nvm
 
-- name: execute the nvm-installer.sh
+- name: download, install nvm
   become: yes
   become_user: "{{ username }}"
-  shell: /tmp/nvm-installer.sh
+  when: nvm.stat.exists == False
+  block:
+    - name: download nvm installer
+      get_url: url=https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh dest=/tmp/nvm-installer.sh mode=0755
 
-- name: remove the nvm-installer.sh
-  become: yes
-  become_user: "{{ username }}"
-  file: path=/tmp/nvm-installer.sh state=absent
+    - name: execute the nvm-installer.sh
+      shell: /tmp/nvm-installer.sh
+
+    - name: remove the nvm-installer.sh
+      file: path=/tmp/nvm-installer.sh state=absent
 
 - name: update .zshrc with nvm settings
   become: yes
   become_user: "{{ username }}"
   blockinfile:
     path: ~/.zshrc
+    marker: "# NVM ANSIBLE MANAGED BLOCK"
     block: |
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

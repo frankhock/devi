@@ -1,29 +1,38 @@
 ---
-- name: install dependencies
-  become: yes
-  apt:
-    name: ['libssl-dev', 'libreadline-dev', 'zlib1g-dev']
-    state: present
-
-- name: download rbenv
+- name: Check if rbenv exists
   become: yes
   become_user: "{{ username }}"
-  git:
-    repo: https://github.com/rbenv/rbenv.git
-    dest: ~/.rbenv
+  stat:
+    path: ~/.rbenv
+  register: rbenv
 
-- name: download rbenv ruby-build
+- name: download, install rbenv
   become: yes
   become_user: "{{ username }}"
-  git:
-    repo: https://github.com/rbenv/ruby-build.git
-    dest: ~/.rbenv/plugins/ruby-build
+  when: rbenv.stat.exists == False
+  block:
+    - name: install dependencies
+      become: yes
+      apt:
+        name: ['libssl-dev', 'libreadline-dev', 'zlib1g-dev']
+        state: present
+
+    - name: download rbenv
+      git:
+        repo: https://github.com/rbenv/rbenv.git
+        dest: ~/.rbenv
+
+    - name: download rbenv ruby-build
+      git:
+        repo: https://github.com/rbenv/ruby-build.git
+        dest: ~/.rbenv/plugins/ruby-build
 
 - name: update .zshrc with rbenv settings
   become: yes
   become_user: "{{ username }}"
   blockinfile:
     path: ~/.zshrc
+    marker: "# RBENV ANSIBLE MANAGED BLOCK"
     block: |
-      export PATH="$HOME/.rbenv/bin:$PATH"
-      eval "$(rbenv init -)"
+        export PATH="$HOME/.rbenv/bin:$PATH"
+        eval "$(rbenv init -)"

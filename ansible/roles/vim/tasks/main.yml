@@ -1,19 +1,23 @@
-- name: Download SpaceVim
+- name: Check if spacevim exists
   become: yes
   become_user: "{{ username }}"
-  get_url: url=https://spacevim.org/install.sh dest=/tmp/spacevim-installer.sh mode=0755
+  stat:
+    path: ~/.SpaceVim
+  register: spacevim
 
-- name: Execute the spacevim-installer.sh
+- name: download, install SpaceVim
   become: yes
   become_user: "{{ username }}"
-  shell: /tmp/spacevim-installer.sh
+  when: spacevim.stat.exists == False
+  block:
+    - name: Download SpaceVim
+      get_url: url=https://spacevim.org/install.sh dest=/tmp/spacevim-installer.sh mode=0755
 
-- name: Remove the spacevim-installer.sh
-  become: yes
-  become_user: "{{ username }}"
-  file: path=/tmp/spacevim-installer.sh state=absent
+    - name: Execute the spacevim-installer.sh
+      shell: /tmp/spacevim-installer.sh
 
-- name: set git default editor to vim
-  become: yes
-  become_user: "{{ username }}"
-  shell: git config --global core.editor "vim"
+    - name: Remove the spacevim-installer.sh
+      file: path=/tmp/spacevim-installer.sh state=absent
+
+    - name: set git default editor to vim
+      shell: git config --global core.editor "vim"
