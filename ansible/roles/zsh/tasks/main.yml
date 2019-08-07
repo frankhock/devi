@@ -73,3 +73,19 @@
     path: ~/.zshrc
     regexp: '^plugins=\('
     line: 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting)'
+
+- name: carry ssh agent forwarding to tmux
+  become: yes
+  become_user: "{{ username }}"
+  blockinfile:
+    path: ~/.zshrc
+    marker: "# TMUX - AGENT FORWARDING ANSIBLE MANAGED BLOCK"
+    block: |
+      # Predictable SSH authentication socket location.
+      SOCK="$HOME/.ssh/ssh_auth_sock"
+      if test $SSH_AUTH_SOCK && [ $SSH_AUTH_SOCK != $SOCK ]
+      then
+        rm -f "$HOME/.ssh/ssh_auth_sock"
+        ln -sf $SSH_AUTH_SOCK $SOCK
+        export SSH_AUTH_SOCK=$SOCK
+      fi
