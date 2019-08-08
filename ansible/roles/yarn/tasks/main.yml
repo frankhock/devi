@@ -1,0 +1,32 @@
+---
+- name: Yarn - check for installation
+  become: yes
+  command: which yarn
+  register: yarn_result
+
+- become: yes
+  when: yarn_result.stdout.find('yarn not found') != -1
+  block:
+    - name: "Yarn - add gpg key"
+      become: yes
+      apt_key:
+        url: https://dl.yarnpkg.com/debian/pubkey.gpg
+        state: present
+
+    - name: "Yarn - add repo"
+      become: yes
+      apt_repository:
+        repo: deb https://dl.yarnpkg.com/debian/ stable main
+        state: present
+
+    - name: "Yarn - update apt cache"
+      become: yes
+      apt:
+        update_cache: yes
+
+    - name: "Yarn - apt install"
+      become: yes
+      apt:
+        name: yarn
+        install_recommends: false
+        state: present
